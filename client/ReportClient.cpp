@@ -1,13 +1,14 @@
 #include "ReportClient.h"
 #include "CallReport.pb.h"
 #include "RingLog.h"
+
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <unistd.h>
 
 using namespace std;
 
-namespace cestlascorpion {
+namespace scorpion {
 
 ReportClient::ReportClient()
     : m_soxFd(-1)
@@ -164,4 +165,4 @@ uint32_t ReportClient::ipToInt(const string &ip) {
     return ntohl(addr.sin_addr.s_addr);
 }
 
-} // namespace cestlascorpion
+} // namespace scorpion

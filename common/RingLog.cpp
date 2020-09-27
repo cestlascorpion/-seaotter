@@ -1,4 +1,5 @@
 #include "RingLog.h"
+
 #include <cassert>
 #include <cerrno>
 #include <cstdarg>
@@ -6,7 +7,7 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
-namespace cestlascorpion {
+namespace scorpion {
 
 #define MEM_USE_LIMIT (3u * 1024 * 1024 * 1024) // 3GB
 #define LOG_USE_LIMIT (1u * 1024 * 1024 * 1024) // 1GB
@@ -237,4 +238,4 @@ void *be_thdo(void *) {
     return nullptr;
 }
 
-} // namespace cestlascorpion
+} // namespace scorpion

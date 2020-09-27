@@ -1,5 +1,4 @@
-#ifndef SEAOTTER_RINGLOG_H
-#define SEAOTTER_RINGLOG_H
+#pragma once
 
 #include <cstdint>
 #include <cstdio>
@@ -10,7 +9,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
-namespace cestlascorpion {
+namespace scorpion {
 
 enum LOG_LEVEL {
     FATAL = 1,
@@ -21,7 +20,7 @@ enum LOG_LEVEL {
     TRACE,
 };
 
-extern pid_t gettid();
+pid_t gettid();
 
 struct utc_timer {
     utc_timer() {
@@ -210,6 +209,8 @@ private:
 
 void *be_thdo(void *args);
 
+} // namespace scorpion
+
 #define LOG_MEM_SET(mem_lmt)                                                                                           \
     do {                                                                                                               \
         if (mem_lmt < 90 * 1024 * 1024) {                                                                              \
@@ -217,12 +218,12 @@ void *be_thdo(void *args);
         } else if (mem_lmt > 1024 * 1024 * 1024) {                                                                     \
             mem_lmt = 1024 * 1024 * 1024;                                                                              \
         }                                                                                                              \
-        RingLog::_one_buff_len = mem_lmt;                                                                              \
+        scorpion::RingLog::_one_buff_len = mem_lmt;                                                                    \
     } while (0)
 
 #define LOG_INIT(log_dir, prog_name, level)                                                                            \
     do {                                                                                                               \
-        RingLog::ins()->init_path(log_dir, prog_name, level);                                                          \
+        scorpion::RingLog::ins()->init_path(log_dir, prog_name, level);                                                \
         pthread_t tid;                                                                                                 \
         pthread_create(&tid, nullptr, be_thdo, nullptr);                                                               \
         pthread_detach(tid);                                                                                           \
@@ -231,112 +232,108 @@ void *be_thdo(void *args);
 // format: [LEVEL][yy-mm-dd h:m:s.ms][tid]file_name:line_no(func_name):content
 #define LOG_TRACE(fmt, args...)                                                                                        \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= TRACE) {                                                                    \
-            RingLog::ins()->try_append("[TRACE]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,            \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= TRACE) {                                                          \
+            scorpion::RingLog::ins()->try_append("[TRACE]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,  \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define LOG_DEBUG(fmt, args...)                                                                                        \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= DEBUG) {                                                                    \
-            RingLog::ins()->try_append("[DEBUG]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,            \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= DEBUG) {                                                          \
+            scorpion::RingLog::ins()->try_append("[DEBUG]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,  \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define LOG_INFO(fmt, args...)                                                                                         \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= INFO) {                                                                     \
-            RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,             \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= INFO) {                                                           \
+            scorpion::RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,   \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define LOG_NORMAL(fmt, args...)                                                                                       \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= INFO) {                                                                     \
-            RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,             \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= INFO) {                                                           \
+            scorpion::RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,   \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define LOG_WARN(fmt, args...)                                                                                         \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= WARN) {                                                                     \
-            RingLog::ins()->try_append("[WARN]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,             \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= WARN) {                                                           \
+            scorpion::RingLog::ins()->try_append("[WARN]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,   \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define LOG_ERROR(fmt, args...)                                                                                        \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= ERROR) {                                                                    \
-            RingLog::ins()->try_append("[ERROR]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,            \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= ERROR) {                                                          \
+            scorpion::RingLog::ins()->try_append("[ERROR]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,  \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define LOG_FATAL(fmt, args...)                                                                                        \
     do {                                                                                                               \
-        RingLog::ins()->try_append("[FATAL]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__, __FUNCTION__,  \
-                                   ##args);                                                                            \
+        scorpion::RingLog::ins()->try_append("[FATAL]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,      \
+                                             __LINE__, __FUNCTION__, ##args);                                          \
     } while (0)
 
 #define TRACE(fmt, args...)                                                                                            \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= TRACE) {                                                                    \
-            RingLog::ins()->try_append("[TRACE]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,            \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= TRACE) {                                                          \
+            scorpion::RingLog::ins()->try_append("[TRACE]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,  \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define DEBUG(fmt, args...)                                                                                            \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= DEBUG) {                                                                    \
-            RingLog::ins()->try_append("[DEBUG]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,            \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= DEBUG) {                                                          \
+            scorpion::RingLog::ins()->try_append("[DEBUG]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,  \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define INFO(fmt, args...)                                                                                             \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= INFO) {                                                                     \
-            RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,             \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= INFO) {                                                           \
+            scorpion::RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,   \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define NORMAL(fmt, args...)                                                                                           \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= INFO) {                                                                     \
-            RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,             \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= INFO) {                                                           \
+            scorpion::RingLog::ins()->try_append("[INFO]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,   \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define WARN(fmt, args...)                                                                                             \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= WARN) {                                                                     \
-            RingLog::ins()->try_append("[WARN]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,             \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= WARN) {                                                           \
+            scorpion::RingLog::ins()->try_append("[WARN]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,   \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define ERROR(fmt, args...)                                                                                            \
     do {                                                                                                               \
-        if (RingLog::ins()->get_level() >= ERROR) {                                                                    \
-            RingLog::ins()->try_append("[ERROR]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__,            \
-                                       __FUNCTION__, ##args);                                                          \
+        if (scorpion::RingLog::ins()->get_level() >= ERROR) {                                                          \
+            scorpion::RingLog::ins()->try_append("[ERROR]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,  \
+                                                 __LINE__, __FUNCTION__, ##args);                                      \
         }                                                                                                              \
     } while (0)
 
 #define FATAL(fmt, args...)                                                                                            \
     do {                                                                                                               \
-        RingLog::ins()->try_append("[FATAL]", "[%u]%s:%d(%s): " fmt "\n", gettid(), __FILE__, __LINE__, __FUNCTION__,  \
-                                   ##args);                                                                            \
+        scorpion::RingLog::ins()->try_append("[FATAL]", "[%u]%s:%d(%s): " fmt "\n", scorpion::gettid(), __FILE__,      \
+                                             __LINE__, __FUNCTION__, ##args);                                          \
     } while (0)
-
-} // namespace cestlascorpion
-
-#endif // SEAOTTER_RINGLOG_H

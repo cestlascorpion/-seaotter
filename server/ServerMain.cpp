@@ -1,11 +1,12 @@
 #include "ReportServer.h"
 #include "RingLog.h"
+
 #include <cassert>
 #include <chrono>
 #include <csignal>
 
 using namespace std;
-using namespace cestlascorpion;
+using namespace scorpion;
 
 void SignalStop(int) {
     LOG_ERROR("[Signal] stop.");

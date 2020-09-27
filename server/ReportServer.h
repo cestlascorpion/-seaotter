@@ -1,12 +1,12 @@
-#ifndef SEAOTTER_REPORTSERVER_H
-#define SEAOTTER_REPORTSERVER_H
+#pragma once
 
 #include "CanaryCounter.h"
 #include "ShmClient.h"
+
 #include <mutex>
 #include <thread>
 
-namespace cestlascorpion {
+namespace scorpion {
 
 class ReportServer {
 public:
@@ -58,6 +58,5 @@ private:
     uint32_t m_interval;
     dataMap m_counter;
 };
-} // namespace cestlascorpion
 
-#endif // SEAOTTER_REPORTSERVER_H
+} // namespace scorpion

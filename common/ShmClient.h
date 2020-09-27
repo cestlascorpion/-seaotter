@@ -1,11 +1,11 @@
-#ifndef SEAOTTER_SHMCLIENT_H
-#define SEAOTTER_SHMCLIENT_H
+#pragma once
 
 #include "RingLog.h"
+
 #include <arpa/inet.h>
 #include <unistd.h>
 
-namespace cestlascorpion {
+namespace scorpion {
 
 class ShmClient {
 public:
@@ -40,6 +40,4 @@ private:
     }
 };
 
-} // namespace cestlascorpion
-
-#endif // SEAOTTER_SHMCLIENT_H
+} // namespace scorpion

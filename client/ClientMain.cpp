@@ -1,11 +1,12 @@
 #include "ReportClient.h"
 #include "RingLog.h"
+
 #include <netinet/in.h>
 #include <random>
 #include <vector>
 
 using namespace std;
-using namespace cestlascorpion;
+using namespace scorpion;
 
 inline double Rand(double mean, double stddev) {
     static default_random_engine engine(time(nullptr));

@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package cestlascorpion;
+package scorpion;
 
 message CallInfo {
   required uint32 ip = 1;

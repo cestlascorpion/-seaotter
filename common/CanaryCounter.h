@@ -1,11 +1,12 @@
-#ifndef SEAOTTER_CANARYCOUNTER_H
-#define SEAOTTER_CANARYCOUNTER_H
+#pragma once
 
 #include <algorithm>
 #include <functional>
 #include <list>
 #include <mutex>
 #include <vector>
+
+namespace scorpion {
 
 template <typename K, typename V, typename Hash>
 class CanaryCounter {
@@ -66,4 +67,4 @@ private:
     Hash _hash;
 };
 
-#endif // SEAOTTER_CANARYCOUNTER_H
+} // namespace scorpion

@@ -1,6 +1,7 @@
 #include "ReportServer.h"
 #include "CallReport.pb.h"
 #include "RingLog.h"
+
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -8,7 +9,7 @@
 
 using namespace std;
 
-namespace cestlascorpion {
+namespace scorpion {
 
 ReportServer::ReportServer()
     : m_flkFd(-1)
@@ -182,4 +183,4 @@ void ReportServer::persistFunc() {
     }
 }
 
-} // namespace cestlascorpion
+} // namespace scorpion

@@ -9,7 +9,7 @@ client包含两个map，分别用于写入和上报。写入时调用commit()，
 ## 改进
 
 1. 沿用map+mutex的方案，优化方式有增加map数量（哈希分组）/ 构造map时指定合理的初始容量减少内存分配 / 改用其他高效的map（如google sparsepp::sparse_hash_map）；
-2. 降低锁粒度。参考拉链法的哈希表数据结构，将mutex下放至哈系桶，仅提供 AddOrUpdate() + GetAndClear() 接口即可，能够有效提升性能。
+2. 降低锁粒度。参考拉链法的哈希表数据结构，将mutex下放至哈系桶，仅提供`AddOrUpdate()`/`GetAndClear()`接口即可，能够有效提升性能。
 
 ### 优化锁：增加分组
 
@@ -23,4 +23,4 @@ client包含两个map，分别用于写入和上报。写入时调用commit()，
 
 ### 更新：去除map
 
-map+mutex的锁颗粒度较大，因此使用canary counter。该计数器的数据结构与拉链法的hashmap相同。为了解决并发访问的问题，每个桶包含一个mutex。计数器只提供两个接口：AddOrUpdate()/GetAndClear()，分别用于单次调用信息写入和聚合上报，性能有明显的提升。
+map+mutex的锁颗粒度较大，因此使用canary counter。该计数器的数据结构与拉链法的hashmap相同。为了解决并发访问的问题，每个桶包含一个mutex。计数器只提供两个接口：`AddOrUpdate()`/`GetAndClear()`，分别用于单次调用信息写入和聚合上报，性能有明显的提升。
